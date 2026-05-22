@@ -34,7 +34,7 @@ export default function LoginPage() {
           </button>
 
           <Link 
-          href= "/caminho tela de cadastro"
+          href= "usuarios/cadastro"
           className="text-center">
             <button
               type="button"
