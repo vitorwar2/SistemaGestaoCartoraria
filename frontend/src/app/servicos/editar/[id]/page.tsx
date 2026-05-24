@@ -1,21 +1,126 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { useParams } from "next/navigation";
+
 import Sidebar from "@/components/Sidebar";
 
-type EditarServicoPageProps = {
-  params: {
-    id: string;
-  };
-};
+export default function EditarServicoPage() {
 
-export default async function EditarServicoPage({
-  params,
-}: EditarServicoPageProps) {
+  const params = useParams();
 
-  const service = {
-    id: params.id,
-    nome: "Autenticação de Documento",
-    descricao: "Reconhecimento e autenticação oficial.",
-    status: "Concluído",
-  };
+  // Estados
+  const [tipo, setTipo] = useState("");
+
+  const [solicitante, setSolicitante] =
+    useState("");
+
+  const [cpf, setCpf] = useState("");
+
+  const [descricao, setDescricao] =
+    useState("");
+
+  const [status, setStatus] = useState("");
+
+  const [dataSolicitacao, setDataSolicitacao] =
+    useState("");
+
+  const [observacoes, setObservacoes] =
+    useState("");
+
+  // Buscar serviço
+  useEffect(() => {
+
+    async function fetchService() {
+
+      try {
+
+        const response = await fetch(
+          `http://localhost:3000/api/servicos/${params.id}`
+        );
+
+        const data = await response.json();
+
+        setTipo(data.tipo || "");
+
+        setSolicitante(
+          data.solicitante || ""
+        );
+
+        setCpf(data.cpf || "");
+
+        setDescricao(
+          data.descricao || ""
+        );
+
+        setStatus(data.status || "");
+
+        setDataSolicitacao(
+          data.dataSolicitacao || ""
+        );
+
+        setObservacoes(
+          data.observacoes || ""
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+        alert("Erro ao carregar serviço.");
+
+      }
+    }
+
+    fetchService();
+
+  }, [params.id]);
+
+  // Submit
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+
+    event.preventDefault();
+
+    try {
+
+      const response = await fetch(
+        `http://localhost:3000/api/servicos/${params.id}`,
+        {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            tipo,
+            solicitante,
+            cpf,
+            descricao,
+            status,
+            dataSolicitacao,
+            observacoes,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      alert("Serviço atualizado com sucesso!");
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Erro ao atualizar serviço.");
+
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-slate-100">
@@ -34,36 +139,103 @@ export default async function EditarServicoPage({
           </h1>
 
           {/* Formulário */}
-          <form className="flex flex-col gap-5">
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={handleSubmit}
+          >
 
-            {/* Nome */}
+            {/* Tipo */}
             <div className="flex flex-col gap-2">
 
               <label
-                htmlFor="nome"
+                htmlFor="tipo"
                 className="font-medium text-slate-700"
               >
-                Nome do Serviço
+                Tipo de Serviço
               </label>
 
-              <select 
-             id="tipo de serviço"
-             className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
-             >
+              <select
+                id="tipo"
+                value={tipo}
+                onChange={(event) =>
+                  setTipo(event.target.value)
+                }
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              >
+
                 <option value="">
                   Selecione um tipo de serviço
                 </option>
+
+                <option value="Certidão de Nascimento">
+                  Certidão de Nascimento
+                </option>
+
                 <option value="Reconhecimento de Firma">
                   Reconhecimento de Firma
                 </option>
-                
-                <option value="Autenticação de Documento">
-                  Autenticação de Documento
+
+                <option value="Autenticação">
+                  Autenticação
                 </option>
-                <option value="Emissão de Certidão">
-                  Emissão de Certidão
+
+                <option value="Escritura">
+                  Escritura
                 </option>
+
+                <option value="Outro">
+                  Outro
+                </option>
+
               </select>
+
+            </div>
+
+            {/* Solicitante */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="solicitante"
+                className="font-medium text-slate-700"
+              >
+                Nome do Solicitante
+              </label>
+
+              <input
+                id="solicitante"
+                type="text"
+                value={solicitante}
+                onChange={(event) =>
+                  setSolicitante(
+                    event.target.value
+                  )
+                }
+                placeholder="Digite o nome do solicitante"
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
+
+            </div>
+
+            {/* CPF */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="cpf"
+                className="font-medium text-slate-700"
+              >
+                CPF do Solicitante
+              </label>
+
+              <input
+                id="cpf"
+                type="text"
+                value={cpf}
+                onChange={(event) =>
+                  setCpf(event.target.value)
+                }
+                placeholder="Digite o CPF"
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
 
             </div>
 
@@ -79,8 +251,38 @@ export default async function EditarServicoPage({
 
               <textarea
                 id="descricao"
-                defaultValue={service.descricao}
+                value={descricao}
+                onChange={(event) =>
+                  setDescricao(
+                    event.target.value
+                  )
+                }
+                placeholder="Digite a descrição do serviço"
                 className="min-h-[120px] rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
+
+            </div>
+
+            {/* Observações */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="observacoes"
+                className="font-medium text-slate-700"
+              >
+                Observações
+              </label>
+
+              <textarea
+                id="observacoes"
+                value={observacoes}
+                onChange={(event) =>
+                  setObservacoes(
+                    event.target.value
+                  )
+                }
+                placeholder="Digite observações adicionais"
+                className="min-h-[100px] rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
               />
 
             </div>
@@ -97,11 +299,19 @@ export default async function EditarServicoPage({
 
               <select
                 id="status"
-                defaultValue={service.status}
+                value={status}
+                onChange={(event) =>
+                  setStatus(event.target.value)
+                }
                 className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
               >
-                <option value="Pendente">
-                  Pendente
+
+                <option value="">
+                  Selecione um status
+                </option>
+
+                <option value="Aguardando">
+                  Aguardando
                 </option>
 
                 <option value="Em andamento">
@@ -113,6 +323,30 @@ export default async function EditarServicoPage({
                 </option>
 
               </select>
+
+            </div>
+
+            {/* Data */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="data"
+                className="font-medium text-slate-700"
+              >
+                Data da Solicitação
+              </label>
+
+              <input
+                id="data"
+                type="date"
+                value={dataSolicitacao}
+                onChange={(event) =>
+                  setDataSolicitacao(
+                    event.target.value
+                  )
+                }
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
 
             </div>
 
