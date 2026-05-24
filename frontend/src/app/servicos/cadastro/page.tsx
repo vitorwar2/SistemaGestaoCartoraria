@@ -1,6 +1,90 @@
+"use client";
+
+import { useState } from "react";
+
 import Sidebar from "@/components/Sidebar";
 
 export default function CadastroServicoPage() {
+
+  // Estados
+  const [tipo, setTipo] = useState("");
+
+  const [solicitante, setSolicitante] =
+    useState("");
+
+  const [cpf, setCpf] = useState("");
+
+  const [descricao, setDescricao] =
+    useState("");
+
+  const [status, setStatus] = useState("");
+
+  const [dataSolicitacao, setDataSolicitacao] =
+    useState("");
+
+  const [observacoes, setObservacoes] =
+    useState("");
+
+  // Submit
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+
+    event.preventDefault();
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:3000/api/servicos",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            tipo,
+            solicitante,
+            cpf,
+            descricao,
+            status,
+            dataSolicitacao,
+            observacoes,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      alert("Serviço cadastrado com sucesso!");
+
+      // Limpar formulário
+      setTipo("");
+
+      setSolicitante("");
+
+      setCpf("");
+
+      setDescricao("");
+
+      setStatus("");
+
+      setDataSolicitacao("");
+
+      setObservacoes("");
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Erro ao cadastrar serviço.");
+
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-slate-100">
 
@@ -18,36 +102,101 @@ export default function CadastroServicoPage() {
           </h1>
 
           {/* Formulário */}
-          <form className="flex flex-col gap-5">
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={handleSubmit}
+          >
 
-            {/* Nome */}
+            {/* Tipo */}
             <div className="flex flex-col gap-2">
 
               <label
-                htmlFor="nome"
+                htmlFor="tipo"
                 className="font-medium text-slate-700"
               >
-                Nome do Serviço
+                Tipo de Serviço
               </label>
 
-             <select 
-             id="tipo de serviço"
-             className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
-             >
+              <select
+                id="tipo"
+                value={tipo}
+                onChange={(event) =>
+                  setTipo(event.target.value)
+                }
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              >
+
                 <option value="">
                   Selecione um tipo de serviço
                 </option>
+
+                <option value="Certidão de Nascimento">
+                  Certidão de Nascimento
+                </option>
+
                 <option value="Reconhecimento de Firma">
                   Reconhecimento de Firma
                 </option>
-                
-                <option value="Autenticação de Documento">
-                  Autenticação de Documento
+
+                <option value="Autenticação">
+                  Autenticação
                 </option>
-                <option value="Emissão de Certidão">
-                  Emissão de Certidão
+
+                <option value="Escritura">
+                  Escritura
                 </option>
+
+                <option value="Outro">
+                  Outro
+                </option>
+
               </select>
+
+            </div>
+
+            {/* Nome do solicitante */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="solicitante"
+                className="font-medium text-slate-700"
+              >
+                Nome do Solicitante
+              </label>
+
+              <input
+                id="solicitante"
+                type="text"
+                value={solicitante}
+                onChange={(event) =>
+                  setSolicitante(event.target.value)
+                }
+                placeholder="Digite o nome do solicitante"
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
+
+            </div>
+
+            {/* CPF */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="cpf"
+                className="font-medium text-slate-700"
+              >
+                CPF do Solicitante
+              </label>
+
+              <input
+                id="cpf"
+                type="text"
+                value={cpf}
+                onChange={(event) =>
+                  setCpf(event.target.value)
+                }
+                placeholder="Digite o CPF"
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
 
             </div>
 
@@ -63,8 +212,34 @@ export default function CadastroServicoPage() {
 
               <textarea
                 id="descricao"
+                value={descricao}
+                onChange={(event) =>
+                  setDescricao(event.target.value)
+                }
                 placeholder="Digite a descrição do serviço"
                 className="min-h-[120px] rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
+
+            </div>
+
+            {/* Observações */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="observacoes"
+                className="font-medium text-slate-700"
+              >
+                Observações
+              </label>
+
+              <textarea
+                id="observacoes"
+                value={observacoes}
+                onChange={(event) =>
+                  setObservacoes(event.target.value)
+                }
+                placeholder="Digite observações adicionais"
+                className="min-h-[100px] rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
               />
 
             </div>
@@ -81,6 +256,10 @@ export default function CadastroServicoPage() {
 
               <select
                 id="status"
+                value={status}
+                onChange={(event) =>
+                  setStatus(event.target.value)
+                }
                 className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
               >
 
@@ -88,8 +267,8 @@ export default function CadastroServicoPage() {
                   Selecione um status
                 </option>
 
-                <option value="Pendente">
-                  Pendente
+                <option value="Aguardando">
+                  Aguardando
                 </option>
 
                 <option value="Em andamento">
@@ -101,6 +280,30 @@ export default function CadastroServicoPage() {
                 </option>
 
               </select>
+
+            </div>
+
+            {/* Data */}
+            <div className="flex flex-col gap-2">
+
+              <label
+                htmlFor="data"
+                className="font-medium text-slate-700"
+              >
+                Data da Solicitação
+              </label>
+
+              <input
+                id="data"
+                type="date"
+                value={dataSolicitacao}
+                onChange={(event) =>
+                  setDataSolicitacao(
+                    event.target.value
+                  )
+                }
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              />
 
             </div>
 
