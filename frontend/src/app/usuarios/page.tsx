@@ -2,6 +2,7 @@
 
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
+import BotoesAcao from "@/components/BotoesAcao";
 
 import { useEffect, useState } from "react";
 
@@ -149,32 +150,13 @@ export default function UsuariosPage() {
                   </td>
 
                   <td className="p-4">
-
-                    <div className="flex justify-center gap-3">
-
-                        <Link
-                          href={`/usuarios/detalhes/${user.id}`}
-                          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-                        >
-                          Detalhes
-                        </Link>
-
-                        <Link
-                          href={`/usuarios/editar/${user.id}`}
-                          className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
-                        >
-                          Editar
-                        </Link>
-
-                        <button
-                          onClick={() => handleDelete(user.id)}
-                          className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-                        >
-                          Excluir
-                        </button>
-
-                      </div>
-
+                    <div className="flex justify-center ">
+                      <BotoesAcao
+                        hrefDetalhes={`/usuarios/detalhes/${user.id}`}
+                        hrefEditar={`/usuarios/editar/${user.id}`}
+                        onDelete={() => handleDelete(user.id)}
+                      />
+                    </div>
                   </td>
 
                 </tr>

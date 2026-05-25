@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
+import BotoesAcao from "@/components/BotoesAcao";
 
 type Service = {
   id: number;
@@ -87,27 +88,11 @@ export default function ServicosPage() {
                   <td className="p-4">
                     <div className="flex justify-center gap-3">
 
-                      <Link
-                        href={`/servicos/detalhes/${service.id}`}
-                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-                      >
-                        Detalhes
-                      </Link>
-
-                      <Link
-                        href={`/servicos/editar/${service.id}`}
-                        className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
-                      >
-                        Editar
-                      </Link>
-
-                      <button
-                        onClick={() => handleDelete(service.id)}
-                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-                      >
-                        Excluir
-                      </button>
-
+                      <BotoesAcao
+                        hrefDetalhes={`/servicos/detalhes/${service.id}`}
+                        hrefEditar={`/servicos/editar/${service.id}`}
+                        onDelete={() => handleDelete(service.id)}
+                      />
                     </div>
                   </td>
                 </tr>

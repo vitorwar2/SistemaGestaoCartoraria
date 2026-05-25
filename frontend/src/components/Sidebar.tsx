@@ -1,11 +1,34 @@
+"use client";
+
 import Link from "next/link";
 
+import { usePathname } from "next/navigation";
+
 export default function Sidebar() {
+
+  const pathname = usePathname();
+
+  function getLinkClass(path: string) {
+
+    const isActive =
+      pathname === path;
+
+    return `
+      rounded-lg px-4 py-3 transition
+      ${
+        isActive
+          ? "bg-blue-700"
+          : "hover:bg-blue-800"
+      }
+    `;
+  }
+
   return (
-    <aside className="flex h-screen w-64 flex-col bg-blue-900 p-6 text-white">
+    <aside className="flex min-h-screen w-64 flex-col bg-blue-900 p-6 text-white">
 
       {/* Logo */}
       <div className="mb-10">
+
         <h1 className="text-2xl font-bold">
           OrganizaCart
         </h1>
@@ -13,6 +36,7 @@ export default function Sidebar() {
         <p className="text-sm text-blue-200">
           Sistema Administrativo
         </p>
+
       </div>
 
       {/* Navegação */}
@@ -20,21 +44,27 @@ export default function Sidebar() {
 
         <Link
           href="/dashboard"
-          className="rounded-lg px-4 py-3 transition hover:bg-blue-800"
+          className={getLinkClass(
+            "/dashboard"
+          )}
         >
-          Dashboard
+          Dashboard 
         </Link>
 
         <Link
           href="/usuarios"
-          className="rounded-lg px-4 py-3 transition hover:bg-blue-800"
+          className={getLinkClass(
+            "/usuarios"
+          )}
         >
           Usuários
         </Link>
 
         <Link
           href="/servicos"
-          className="rounded-lg px-4 py-3 transition hover:bg-blue-800"
+          className={getLinkClass(
+            "/servicos"
+          )}
         >
           Serviços
         </Link>
@@ -43,12 +73,14 @@ export default function Sidebar() {
 
       {/* Logout */}
       <div className="mt-auto">
+
         <Link
           href="/"
           className="block w-full rounded-lg bg-red-600 p-3 text-center font-medium text-white transition hover:bg-red-700"
         >
           Sair
         </Link>
+
       </div>
 
     </aside>
