@@ -45,7 +45,7 @@ O sistema conta com autenticação de usuários, cadastro, edição, exclusão e
 ## Estrutura do Projeto
 
 ```bash
-sistema-cartorio/
+
 ├── prisma/
 │   └── schema.prisma
 ├── src/
@@ -105,7 +105,7 @@ sistema-cartorio/
 
 ```bash
 git clone URL_DO_REPOSITORIO
-cd sistema-cartorio
+
 ```
 
 ### 2. Instale as dependências
