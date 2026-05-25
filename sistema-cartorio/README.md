@@ -79,7 +79,7 @@ sistema-cartorio/
 ## Imagens do Projeto
 
 ### Tela de Login
-<img src="/public/login.png" width="800"/>
+<img src="public/login.png" width="800"/>
 
 ### Dashboard
 <img src="/public/dashboard.png" width="800"/>
