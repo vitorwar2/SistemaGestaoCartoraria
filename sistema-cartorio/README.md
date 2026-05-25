@@ -82,19 +82,19 @@ sistema-cartorio/
 <img src="public/login.png" width="800"/>
 
 ### Dashboard
-<img src="/public/dashboard.png" width="800"/>
+<img src="public/dashboard.png" width="800"/>
 
 ### Tela de Usuários
-<img src="/public/usuarios.png" width="800"/>
+<img src="public/usuarios.png" width="800"/>
 
 ### Tela de Serviços
-<img src="/public/servicos.png" width="800"/>
+<img src="public/servicos.png" width="800"/>
 
 ### Tela de Editar Serviços
-<img src="/public/editarServico.png" width="800"/>
+<img src="public/editarServico.png" width="800"/>
 
 ### Tela de Excluir Serviços
-<img src="/public/excluir.png" width="800"/>
+<img src="public/excluir.png" width="800"/>
 
 ## Como Rodar o Projeto
 
