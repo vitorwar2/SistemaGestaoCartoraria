@@ -1,103 +1,26 @@
-export type Service = {
-  id: number;
-
-  tipo: string;
-
-  solicitante: string;
-
-  cpf: string;
-
-  descricao: string;
-
-  status: string;
-
-  dataSolicitacao: string;
-
-  observacoes: string;
-};
-
-
-// Banco fake
-export let services: Service[] = [
-
-  {
-    id: 1,
-
-    tipo: "Autenticação",
-
-    solicitante: "João Vitor",
-
-    cpf: "123.456.789-00",
-
-    descricao:
-      "Autenticação de documentos pessoais.",
-
-    status: "Em andamento",
-
-    dataSolicitacao: "2026-05-24",
-
-    observacoes:
-      "Cliente solicitou urgência.",
-  },
-
-  {
-    id: 2,
-
-    tipo: "Reconhecimento de Firma",
-
-    solicitante: "Maria Silva",
-
-    cpf: "987.654.321-00",
-
-    descricao:
-      "Reconhecimento de assinatura.",
-
-    status: "Aguardando",
-
-    dataSolicitacao: "2026-05-20",
-
-    observacoes:
-      "Aguardando documentação.",
-  },
-];
-
+import { prisma } from "@/lib/prisma";
 
 // GET
 export async function GET() {
-
-  return Response.json(services);
-
+  const servicos = await prisma.servico.findMany();
+  return Response.json(servicos);
 }
 
-
 // POST
-export async function POST(
-  request: Request
-) {
-
+export async function POST(request: Request) {
   const body = await request.json();
 
-  const newService: Service = {
+  const novoServico = await prisma.servico.create({
+    data: {
+      tipo: body.tipo,
+      solicitante: body.solicitante,
+      cpf: body.cpf,
+      descricao: body.descricao,
+      status: body.status,
+      dataSolicitacao: body.dataSolicitacao,
+      observacoes: body.observacoes,
+    },
+  });
 
-    id: services.length + 1,
-
-    tipo: body.tipo,
-
-    solicitante: body.solicitante,
-
-    cpf: body.cpf,
-
-    descricao: body.descricao,
-
-    status: body.status,
-
-    dataSolicitacao:
-      body.dataSolicitacao,
-    observacoes:
-      body.observacoes,
-  };
-
-  services.push(newService);
-
-  return Response.json(newService);
+  return Response.json(novoServico, { status: 201 });
 }

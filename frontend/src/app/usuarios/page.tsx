@@ -152,23 +152,28 @@ export default function UsuariosPage() {
 
                     <div className="flex justify-center gap-3">
 
-                      <Link
-                        href={`/usuarios/editar/${user.id}`}
-                        className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
-                      >
-                        Editar
-                      </Link>
+                        <Link
+                          href={`/usuarios/detalhes/${user.id}`}
+                          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                        >
+                          Detalhes
+                        </Link>
 
-                      <button
-                        onClick={() =>
-                          handleDelete(user.id)
-                        }
-                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-                      >
-                        Excluir
-                      </button>
+                        <Link
+                          href={`/usuarios/editar/${user.id}`}
+                          className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
+                        >
+                          Editar
+                        </Link>
 
-                    </div>
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                        >
+                          Excluir
+                        </button>
+
+                      </div>
 
                   </td>
 
