@@ -87,6 +87,9 @@ sistema-cartorio/
 ### Tela de Usuários
 <img src="public/usuarios.png" width="800"/>
 
+### Tela de Cadastro de Usuários
+<img src="public/cadastroUser.png" width="800"/>
+
 ### Tela de Serviços
 <img src="public/servicos.png" width="800"/>
 
