@@ -1,4 +1,4 @@
-import { users } from "../route";
+import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
   params: Promise<{
@@ -6,24 +6,28 @@ type RouteContext = {
   }>;
 };
 
-
-// GET usuário específico
+// GET usuário por id
 export async function GET(
   request: Request,
   context: RouteContext
 ) {
 
-  const { id } = await context.params;
+  const { id } =
+    await context.params;
 
-  const user = users.find(
-    (user) => user.id === Number(id)
-  );
+  const user =
+    await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
 
   if (!user) {
 
     return Response.json(
-      { 
-        error: "Usuário não encontrado",
+      {
+        error:
+          "Usuário não encontrado",
       },
       {
         status: 404,
@@ -31,12 +35,16 @@ export async function GET(
     );
   }
 
-  const { senha, ...userWithoutPassword } = user;
+  // Remove senha
+  const {
+    senha,
+    ...userWithoutPassword
+  } = user;
 
-  return Response.json(userWithoutPassword);
+  return Response.json(
+    userWithoutPassword
+  );
 }
-
-
 
 // PUT
 export async function PUT(
@@ -44,39 +52,49 @@ export async function PUT(
   context: RouteContext
 ) {
 
-  const { id } = await context.params;
+  const { id } =
+    await context.params;
 
-  const body = await request.json();
+  const body =
+    await request.json();
 
-  const userIndex = users.findIndex(
-    (user) => user.id === Number(id)
-  );
+  try {
 
-  if (userIndex === -1) {
+    const updatedUser =
+      await prisma.user.update({
+        where: {
+          id: Number(id),
+        },
+
+        data: {
+          nome: body.nome,
+          email: body.email,
+          perfil: body.perfil,
+        },
+      });
+
+    const {
+      senha,
+      ...userWithoutPassword
+    } = updatedUser;
+
+    return Response.json(
+      userWithoutPassword
+    );
+
+  } catch {
 
     return Response.json(
       {
-        error: "Usuário não encontrado",
+        error:
+          "Usuário não encontrado",
       },
       {
         status: 404,
       }
     );
   }
-
-  users[userIndex] = {
-    ...users[userIndex],
-
-    nome: body.nome,
-
-    email: body.email,
-
-    perfil: body.perfil,
-  };
-
-  return Response.json(users[userIndex]);
 }
-
 
 // DELETE
 export async function DELETE(
@@ -84,30 +102,32 @@ export async function DELETE(
   context: RouteContext
 ) {
 
-  const { id } = await context.params;
+  const { id } =
+    await context.params;
 
-  const userIndex = users.findIndex(
-    (user) => user.id === Number(id)
-  );
+  try {
 
-  if (userIndex === -1) {
+    await prisma.user.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return Response.json({
+      message:
+        "Usuário removido com sucesso",
+    });
+
+  } catch {
 
     return Response.json(
       {
-        error: "Usuário não encontrado",
+        error:
+          "Usuário não encontrado",
       },
       {
         status: 404,
       }
     );
   }
-
-  const deletedUser = users[userIndex];
-
-  users.splice(userIndex, 1);
-
-  return Response.json({
-    message: "Usuário removido com sucesso",
-    user: deletedUser,
-  });
 }

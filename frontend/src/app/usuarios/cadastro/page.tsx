@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import BotaoVoltar from "@/components/BotaoVoltar";
 export default function CadastroUsuarioPage() {
 
   // Estados
@@ -11,52 +11,53 @@ export default function CadastroUsuarioPage() {
   const [senha, setSenha] = useState("");
 
   // Submit
-  async function handleSubmit(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
+async function handleSubmit(
+  event: React.FormEvent<HTMLFormElement>
+) {
+  event.preventDefault();
 
-    event.preventDefault();
-
-    try {
-
-      const response = await fetch(
-        "http://localhost:3000/api/usuarios",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },   
-
-          body: JSON.stringify({
-            nome,
-            email,
-            perfil,
-            senha,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      console.log(data);
-
-      alert("Usuário cadastrado com sucesso!");
-
-      // Limpar formulário
-      setNome("");
-      setEmail("");
-      setPerfil("");
-      setSenha("");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Erro ao cadastrar usuário.");
-
-    }
+  if (!nome || !email || !perfil || !senha) {
+    alert("Preencha todos os campos antes de cadastrar.");
+    return;
   }
+
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/usuarios",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome,
+          email,
+          perfil,
+          senha,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error || "Erro ao cadastrar usuário.");
+      return;
+    }
+
+    console.log(data);
+    alert("Usuário cadastrado com sucesso!");
+
+    setNome("");
+    setEmail("");
+    setPerfil("");
+    setSenha("");
+
+  } catch (error) {
+    console.log(error);
+    alert("Erro ao cadastrar usuário.");
+  }
+}
 
   return (
     <main
@@ -92,9 +93,7 @@ export default function CadastroUsuarioPage() {
               type="text"
               placeholder="Digite o nome"
               value={nome}
-              onChange={(event) =>
-                setNome(event.target.value)
-              }
+              onChange={(event) => setNome(event.target.value)}
               className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
             />
 
@@ -115,9 +114,7 @@ export default function CadastroUsuarioPage() {
               type="email"
               placeholder="Digite o e-mail"
               value={email}
-              onChange={(event) =>
-                setEmail(event.target.value)
-              }
+              onChange={(event) => setEmail(event.target.value)}
               className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
             />
 
@@ -133,29 +130,16 @@ export default function CadastroUsuarioPage() {
               Perfil
             </label>
 
-            <select
-              id="perfil"
-              value={perfil}
-              onChange={(event) =>
-                setPerfil(event.target.value)
-              }
-              className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
-            >
-
-              <option value="">
-                Selecione um perfil
-              </option>
-
-              <option value="ATENDENTE">
-                Atendente
-              </option>
-
-              <option value="ADMINISTRADOR">
-                Administrador
-              </option>
-
-            </select>
-
+              <select
+                id="perfil"
+                value={perfil}
+                onChange={(event) => setPerfil(event.target.value)}
+                className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
+              >
+                <option value="">Selecione um perfil</option>
+                <option value="ATENDENTE">Atendente</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
           </div>
 
           {/* Senha */}
@@ -173,12 +157,9 @@ export default function CadastroUsuarioPage() {
               type="password"
               placeholder="Digite a senha"
               value={senha}
-              onChange={(event) =>
-                setSenha(event.target.value)
-              }
+              onChange={(event) => setSenha(event.target.value)}
               className="rounded-lg border border-slate-300 p-3 outline-none transition focus:border-blue-600"
             />
-
           </div>
 
           {/* Botão */}
@@ -190,6 +171,7 @@ export default function CadastroUsuarioPage() {
           </button>
 
         </form>
+        <BotaoVoltar/>
 
       </div>
 

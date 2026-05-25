@@ -27,64 +27,58 @@ export default function CadastroServicoPage() {
 
   // Submit
   async function handleSubmit(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
+  event: React.FormEvent<HTMLFormElement>
+) {
+  event.preventDefault();
 
-    event.preventDefault();
-
-    try {
-
-      const response = await fetch(
-        "http://localhost:3000/api/servicos",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            tipo,
-            solicitante,
-            cpf,
-            descricao,
-            status,
-            dataSolicitacao,
-            observacoes,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      console.log(data);
-
-      alert("Serviço cadastrado com sucesso!");
-
-      // Limpar formulário
-      setTipo("");
-
-      setSolicitante("");
-
-      setCpf("");
-
-      setDescricao("");
-
-      setStatus("");
-
-      setDataSolicitacao("");
-
-      setObservacoes("");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Erro ao cadastrar serviço.");
-
-    }
+  if (!tipo || !solicitante || !cpf || !descricao || !status || !dataSolicitacao || !observacoes) {
+    alert("Preencha todos os campos antes de cadastrar.");
+    return;
   }
 
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/servicos",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tipo,
+          solicitante,
+          cpf,
+          descricao,
+          status,
+          dataSolicitacao,
+          observacoes,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error || "Erro ao cadastrar serviço.");
+      return;
+    }
+
+    console.log(data);
+    alert("Serviço cadastrado com sucesso!");
+
+    setTipo("");
+    setSolicitante("");
+    setCpf("");
+    setDescricao("");
+    setStatus("");
+    setDataSolicitacao("");
+    setObservacoes("");
+
+  } catch (error) {
+    console.log(error);
+    alert("Erro ao cadastrar serviço.");
+  }
+}
   return (
     <div className="flex min-h-screen bg-slate-100">
 
@@ -92,7 +86,7 @@ export default function CadastroServicoPage() {
       <Sidebar />
 
       {/* Conteúdo */}
-      <main className="flex flex-1 items-center justify-center p-8">
+      <main className="flex flex-1 justify-center p-8">
 
         <div className="w-full max-w-2xl rounded-2xl bg-white p-8 shadow-lg">
 

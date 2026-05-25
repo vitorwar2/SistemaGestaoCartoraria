@@ -1,5 +1,5 @@
 "use client";
-
+import BotaoVoltar from "@/components/BotaoVoltar";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -94,9 +94,9 @@ export default function EditarUsuarioPage() {
     <main className="flex min-h-screen items-center justify-center bg-slate-100 p-6">
 
       <div className="w-full max-w-xl rounded-2xl bg-white p-8 shadow-xl">
-
+        
         <h1 className="mb-8 text-center text-3xl font-bold text-blue-900">
-          Editar Usuário #{params.id}
+          Editar Usuário {nome}
         </h1>
 
         <form
@@ -187,7 +187,10 @@ export default function EditarUsuarioPage() {
             Salvar Alterações
           </button>
 
+          
         </form>
+        
+          <BotaoVoltar />
 
       </div>
 

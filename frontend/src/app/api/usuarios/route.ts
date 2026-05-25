@@ -1,52 +1,51 @@
-export let users = [
-  {
-    id: 1,
-    nome: "João Vitor",
-    email: "joao@gmail.com",
-    perfil: "Administrador",
-    senha: "123456",
-  },
+import { prisma } from "@/lib/prisma";
 
-  {
-    id: 2,
-    nome: "Maria",
-    email: "maria@gmail.com",
-    perfil: "Atendente",
-    senha: "654321",
-  },
-];
 
-//GET
+// GET
 export async function GET() {
 
-  const usersWithoutPassword = users.map((user) => {
+  const users =
+    await prisma.user.findMany();
 
-    return {
-      id: user.id,
-      nome: user.nome,
-      email: user.email,
-      perfil: user.perfil,
-    };
+  // Remove senha
+  const usersWithoutPassword =
+    users.map(
+      ({ senha, ...user }) => user
+    );
 
-  });
-
-  return Response.json(usersWithoutPassword);
+  return Response.json(
+    usersWithoutPassword
+  );
 }
 
 // POST
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+) {
 
-  const body = await request.json();
+  const body =
+    await request.json();
 
-  const newUser = {
-    id: users.length + 1,
-    nome: body.nome,
-    email: body.email,
-    perfil: body.perfil,
-    senha: body.senha,
-  };
+  const newUser =
+    await prisma.user.create({
+      data: {
+        nome: body.nome,
+        email: body.email,
+        senha: body.senha,
+        perfil: body.perfil,
+      },
+    });
 
-  users.push(newUser);
+  // Remove senha
+  const {
+    senha,
+    ...userWithoutPassword
+  } = newUser;
 
-  return Response.json(newUser);
+  return Response.json(
+    userWithoutPassword,
+    {
+      status: 201,
+    }
+  );
 }

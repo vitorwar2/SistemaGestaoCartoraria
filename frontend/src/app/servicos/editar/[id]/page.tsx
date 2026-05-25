@@ -1,5 +1,7 @@
 "use client";
 
+import BotaoVoltar from "@/components/BotaoVoltar";
+
 import { useEffect, useState } from "react";
 
 import { useParams } from "next/navigation";
@@ -135,7 +137,7 @@ export default function EditarServicoPage() {
 
           {/* Título */}
           <h1 className="mb-8 text-3xl font-bold text-slate-800">
-            Editar Serviço #{params.id}
+            Editar Serviço # {tipo} - {solicitante}
           </h1>
 
           {/* Formulário */}
@@ -359,6 +361,7 @@ export default function EditarServicoPage() {
             </button>
 
           </form>
+          <BotaoVoltar />
 
         </div>
 
